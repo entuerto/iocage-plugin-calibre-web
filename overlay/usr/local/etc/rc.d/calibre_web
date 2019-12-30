@@ -1,0 +1,54 @@
+#!/bin/sh
+#!/usr/bin/env python3.6
+# File name is calibre-web
+# Place this file into /etc/rc.d
+# Edit /etc/rc.conf to include calibre_enable=YES
+# By default calibre-web runs using root,
+# if you want to run calibre-web as another user,
+# include calibre_user=username to /etc/rc.conf
+
+# PROVIDE: calibre_web
+# BEFORE: LOGIN
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name=calibre_web
+rcvar=calibre_web_enable
+
+pidfile="/var/run/${name}.pid"
+PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
+command="python3.6 /usr/local/app/calibre-web/cps.py"
+
+start_cmd="${name}_start"
+stop_cmd="${name}_stop"
+
+load_rc_config $name
+: ${calibre_web_enable:=NO}
+: ${calibre_web_user:=calibreweb}
+
+calibre_web_start()
+{
+    if [ -e ${pidfile} ];
+    then
+        echo "${name} is already running"
+    else
+        echo "Starting ${name}"
+        /usr/sbin/daemon -p ${pidfile} ${command}
+    fi
+}
+
+
+calibre_web_stop()
+{
+    if [ -e ${pidfile} ];
+    then
+        echo "Stopping ${name}"
+        kill `cat ${pidfile}`;
+        sleep 1
+         else
+        echo "${name} is not running"
+    fi
+}
+
+run_rc_command "$1"
