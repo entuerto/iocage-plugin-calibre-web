@@ -18,7 +18,7 @@ rcvar=calibre_web_enable
 
 pidfile="/var/run/${name}.pid"
 PATH="/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin"
-command="python3.6 /usr/local/app/calibre-web/cps.py"
+command="python3 /usr/local/app/calibre-web/cps.py"
 
 start_cmd="${name}_start"
 stop_cmd="${name}_stop"
@@ -37,7 +37,6 @@ calibre_web_start()
         /usr/sbin/daemon -p ${pidfile} ${command}
     fi
 }
-
 
 calibre_web_stop()
 {
